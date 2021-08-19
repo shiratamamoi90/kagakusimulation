@@ -9,7 +9,11 @@
   <input type="button" onclick="c()" value="clear">
   <br>
   <form>
+    <input type="number" size="5" id="pi">
+    <!--<input type="text" size="5" name="size">-->
+    <input type="button" value="set" onclick="set()">
   </form>
+  <br>角度：<div id="C">45</div>度<br>
   <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
   <canvas id="c2" width="1000px" height="1000px" style="position:absolute; z-index:1"></canvas>
   <br>
@@ -21,16 +25,13 @@
     var ctx2 = c2.getContext("2d");
 
     var a, b;
-    var m, t, r, radian, g = 9.8;
+    var t, r, radian, pi, g = 9.8;
     var x, y, x1, y1;
 
     a = 200.0; b = 900.0;
 
     r = 20; t = 0;
     radian = Math.PI/4;
-
-    x = 1100.0 - (700.0 / Math.cos(radian));
-    y = 1100.0 - (700.0 / Math.sin(radian));
 
     function start() {
       x1 = x + (r/Math.cos(radian)); y1 = y;
@@ -66,21 +67,40 @@
       ctx2.fill();
     }
 
-    ctx1.fillStyle = "#ffffff";
-    ctx1.fillRect(0, 0, 1000, 1000);
+    function set(){
+      pi = document.getElementById("pi").value;
 
-    ctx1.fillStyle = "black";
-    ctx1.beginPath();
-    ctx1.moveTo(a, b);
-    ctx1.lineTo(b, b);
-    ctx1.lineTo(x, y);
-    ctx1.stroke();
+      document.getElementById("C").innerHTML = pi;
+      pi = 180/pi;
+      radian = Math.PI/pi;
 
-    ctx2.fillStyle = "skyblue";
-    ctx2.beginPath();
-    ctx2.arc(x + (r/Math.cos(radian)), y, r, 0, Math.PI*2, true);
-    ctx2.fill();
+      first();
+      console.log(x);
+      console.log(y);
+      c();
+    }
 
+    function first(){
+      x = 1100.0 - (700.0 / Math.sin(radian));
+      y = 1100.0 - (700.0 / Math.cos(radian));
+
+      ctx1.fillStyle = "#ffffff";
+      ctx1.fillRect(0, 0, 1000, 1000);
+
+      ctx1.fillStyle = "black";
+      ctx1.beginPath();
+      ctx1.moveTo(a, b);
+      ctx1.lineTo(b, b);
+      ctx1.lineTo(x, y);
+      ctx1.stroke();
+
+      ctx2.fillStyle = "skyblue";
+      ctx2.beginPath();
+      ctx2.arc(x + (r/Math.cos(radian)), y, r, 0, Math.PI*2, true);
+      ctx2.fill();
+    }
+
+  first();
   </script>
 </body>
 </html>
