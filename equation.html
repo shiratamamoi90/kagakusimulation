@@ -5,9 +5,11 @@
   <title>masatu</title>
 </head>
 <body>
-  <input type="button" onclick="go()" value="button">
+  <input type="button" onclick="start()" value="start">
   <input type="button" onclick="c()" value="clear">
   <br>
+  <form>
+  </form>
   <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
   <canvas id="c2" width="1000px" height="1000px" style="position:absolute; z-index:1"></canvas>
   <br>
@@ -30,8 +32,8 @@
     x = 1100.0 - (700.0 / Math.cos(radian));
     y = 1100.0 - (700.0 / Math.sin(radian));
 
-    function go() {
-      x1 = x + (r*Math.sqrt(2)); y1 = y;
+    function start() {
+      x1 = x + (r/Math.cos(radian)); y1 = y;
       t = 0.0;
 
       update();
@@ -60,7 +62,7 @@
 
       ctx2.fillStyle = "skyblue";
       ctx2.beginPath();
-      ctx2.arc(x + (r*Math.sqrt(2)), y, r, 0, Math.PI*2, true);
+      ctx2.arc(x + (r/Math.cos(radian)), y, r, 0, Math.PI*2, true);
       ctx2.fill();
     }
 
@@ -76,7 +78,7 @@
 
     ctx2.fillStyle = "skyblue";
     ctx2.beginPath();
-    ctx2.arc(x + (r*Math.sqrt(2)), y, r, 0, Math.PI*2, true);
+    ctx2.arc(x + (r/Math.cos(radian)), y, r, 0, Math.PI*2, true);
     ctx2.fill();
 
   </script>
