@@ -1,0 +1,61 @@
+<!DOCTYPE>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <title>SIMULATE</title>
+</head>
+<body>
+<canvas id="c1" width="1000px" height="1000px"></canvas>
+<script type="text/javascript">
+  var c1 = document.getElementById('c1');
+  var ctx1 = c1.getContext("2d");
+
+  var fx, fy, vx, vy, dt;
+  var x, y, x1, y1, r1;
+  var m1 = 80.0, m2 = 1.0;
+  var g = 100.0;
+
+  //初期設定
+  x = 500;
+  y = 500;
+  dt = 1.0;
+
+  x1 = 700;
+  y1 = 500;
+  vx1 = 0.0;
+  vy1 = -5.0;
+
+  p = ctx1.createImageData(1, 1);
+  p.data[0] = 255;
+  p.data[1] = 0;
+  p.data[2] = 0;
+  p.data[3] = 255;
+
+  function update(){
+    r1 = Math.sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y));
+
+    fx = (-1)*m1*m2*g*(x1-x)/(r1*r1*r1);
+    fy = (-1)*m1*m2*g*(y1-y)/(r1*r1*r1);
+
+    x1 = x1 + vx1*dt;
+    vx1 = vx1 + fx*dt
+    y1 = y1 + vy1*dt;
+    vy1 = vy1 + fy*dt;
+
+    ctx1.putImageData(p, x1, y1);
+
+    tid = setTimeout("update()", 50);
+  }
+
+  ctx1.fillStyle = "black";
+  ctx1.fillRect(0, 0, 1000, 1000);
+
+  ctx1.fillStyle = "#0080ff";
+  ctx1.beginPath();
+  ctx1.arc(x, y, 24, 0, Math.PI*2, true);
+  ctx1.fill();
+
+  update()
+</script>
+</body>
+</html>
