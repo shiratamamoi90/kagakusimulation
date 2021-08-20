@@ -19,44 +19,54 @@
   <br>
 
   <script type="text/javascript">
+    //描画領域の作成
     var c1 = document.getElementById('c1');
     var ctx1 = c1.getContext("2d");
     var c2 = document.getElementById('c2');
     var ctx2 = c2.getContext("2d");
 
+    //変数の定義
     var a, b;
     var t, r, radian, pi, g = 9.8;
     var x, y, x1, y1;
 
-    a = 200.0; b = 900.0;
+    //初期設定
+    a = 200.0; b = 900.0; //坂の描画のための座標
 
-    r = 20; t = 0;
-    radian = Math.PI/4;
+    r = 20; t = 0; //rはボールの半径、tは時間
+    radian = Math.PI/4; //Math.PIは円周率を表しており、radianはラジアンを表している。
 
+    //ボールの転がり開始をする処理
     function start() {
-      x1 = x + (r/Math.cos(radian)); y1 = y;
-      t = 0.0;
+      x1 = x + (r/Math.cos(radian); y1 = y; //ボールの中心の位置を別の変数に代入
+      t = 0.0; //時間の初期化
 
-      update();
+      update(); //転がりを描画するための処理
     }
 
+    //転がりを描画するための処理
     function update(){
-      ctx2.clearRect(0, 0, 1000, 1000);
-      y1 += (1/2) * g * Math.sin(radian) * Math.cos(radian) * (t*t);
-      x1 += (1/2) * g * Math.sin(radian) * Math.sin(radian) * (t*t);
+      ctx2.clearRect(0, 0, 1000, 1000); //ボールを消す処理
 
-      t += 0.05;
+      //ボールの座標を更新
+      y1 += (1/2) * g * Math.cos(radian) * (t*t);
+      x1 += (1/2) * g * Math.sin(radian) * (t*t);
 
+      t += 0.05; //時間の更新
+
+      //ボールの描画
       ctx2.fillStyle = "skyblue";
       ctx2.beginPath();
       ctx2.arc(x1, y1, r, 0, Math.PI*2, true);
       ctx2.fill();
 
+      //坂の下まで転がったら停止
       if(x1 < 900 && y1 < 900 ){
         tid = setTimeout("update()", 50);
       }
     }
 
+    //ボールの位置を戻す処理
     function c(){
       ctx2.fillStyle = "#ffffff";
       ctx2.clearRect(0, 0, 1000, 1000);
@@ -67,8 +77,13 @@
       ctx2.fill();
     }
 
+    //坂の角度を設定するための処理
     function set(){
       pi = document.getElementById("pi").value;
+
+      if(pi < 0 || pi > 90) {
+        return 0;
+      }
 
       document.getElementById("C").innerHTML = pi;
       pi = (90 - pi) / 180;
@@ -79,9 +94,8 @@
       c();
     }
 
+    //坂を描画するための処理
     function first(){
-      //x = 1100 - (700.0 / Math.sin(radian));
-      //y = 1100 - (700.0 / Math.cos(radian));
       x = (-1) * 700 * Math.cos(Math.PI - radian);
       y = 700 * Math.sin(Math.PI - radian);
       x -= 200;
