@@ -42,8 +42,8 @@
 
     function update(){
       ctx2.clearRect(0, 0, 1000, 1000);
-      y1 += (1/2) * g * (t*t);
-      x1 += (1/2) * Math.sin(radian*2) * g * (t*t);
+      y1 += (1/2) * g * Math.sin(radian) * Math.cos(radian) * (t*t);
+      x1 += (1/2) * g * Math.sin(radian) * Math.sin(radian) * (t*t);
 
       t += 0.05;
 
@@ -71,18 +71,21 @@
       pi = document.getElementById("pi").value;
 
       document.getElementById("C").innerHTML = pi;
-      pi = 180/pi;
-      radian = Math.PI/pi;
+      pi = (90 - pi) / 180;
+      radian = Math.PI*pi;
 
       first();
-      console.log(x);
-      console.log(y);
+
       c();
     }
 
     function first(){
-      x = 1100.0 - (700.0 / Math.sin(radian));
-      y = 1100.0 - (700.0 / Math.cos(radian));
+      //x = 1100 - (700.0 / Math.sin(radian));
+      //y = 1100 - (700.0 / Math.cos(radian));
+      x = (-1) * 700 * Math.cos(Math.PI - radian);
+      y = 700 * Math.sin(Math.PI - radian);
+      x -= 200;
+      y -= 200;
 
       ctx1.fillStyle = "#ffffff";
       ctx1.fillRect(0, 0, 1000, 1000);
