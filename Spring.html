@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Spring</title>
+</head>
+<body>
+  <canvas id="c1" width="1000px" height="1200px"></canvas>
+  <script type="text/javascript">
+    var c1 = document.getElementById('c1');
+    var ctx1 = c1.getContext("2d");
+
+    var x = [300, 300, 200, 400, 200, 400, 200, 400, 300, 300];
+    var y = [  0, 100, 150, 250, 350, 450, 550, 650, 750, 850];
+
+    var m, r, k, t = 0.0, g = 9.8;
+
+    r = 20.0;
+    m = 1.0;
+    k = 1.0;
+
+    var mx = x[9];
+    var my = y[9] + r;
+
+    function update() {
+
+    }
+
+    ctx1.fillStyle = "#ffffff";
+    ctx1.fillRect(0, 0, 1000, 1200);
+
+    ctx1.fillStyle = "black";
+    ctx1.beginPath();
+    ctx1.moveTo(x[0], y[0]);
+    for(let i = 1; i < 10; i++) {
+      ctx1.lineTo(x[i], y[i]);
+    }
+    ctx1.stroke();
+
+    ctx1.fillStyle = "skyblue";
+    ctx1.beginPath();
+    ctx1.arc(mx, my, r, 0, Math.PI*2, true);
+    ctx1.fill();
+
+  </script>
+</body>
+</html>
