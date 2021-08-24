@@ -6,6 +6,12 @@
 </head>
 <body>
   <canvas id="c1" width="1000px" height="1200px"></canvas>
+  <input type="button" value="start" onclick="update()">
+  <form>
+    <input type="number" id="mass">
+    <input type="number" id="Spring">
+    <input type="button" value="set" onclick="set()">
+  </form>
   <script type="text/javascript">
     var c1 = document.getElementById('c1');
     var ctx1 = c1.getContext("2d");
@@ -13,9 +19,9 @@
     var x = [300, 300, 200, 400, 200, 400, 200, 400, 300, 300];
     var y = [  0, 100, 150, 250, 350, 450, 550, 650, 750, 850];
 
-    var m, r, k, t = 0.0, g = 9.8;
+    var m, r, k, t = 0.0;
 
-    r = 20.0;
+    r = 50.0;
     m = 1.0;
     k = 1.0;
 
@@ -23,25 +29,56 @@
     var my = y[9] + r;
 
     function update() {
+      /*
+      if(Math.cos(Math.sqrt(k/m) * t) > 0) {
+        //a = ;
+      } else {
+        //a = ;
+      }
+      */
 
+      my += r * Math.cos(Math.sqrt(k/m) * t);
+
+      for(let i = 1; i < 10; i++) {
+        y[i] += r * Math.cos(Math.sqrt(k/m) * t);
+      }
+
+      t += 0.5;
+
+      first();
+
+      tid = setTimeout("update()", 50);
     }
 
-    ctx1.fillStyle = "#ffffff";
-    ctx1.fillRect(0, 0, 1000, 1200);
+    function set() {
+      if(document.getElementById("mass").value != null) {
+        m = document.getElementById("mass").value;
+      }
 
-    ctx1.fillStyle = "black";
-    ctx1.beginPath();
-    ctx1.moveTo(x[0], y[0]);
-    for(let i = 1; i < 10; i++) {
-      ctx1.lineTo(x[i], y[i]);
+      if(document.getElementById("Spring").value != null) {
+        k = document.getElementById("Spring").value;
+      }
     }
-    ctx1.stroke();
 
-    ctx1.fillStyle = "skyblue";
-    ctx1.beginPath();
-    ctx1.arc(mx, my, r, 0, Math.PI*2, true);
-    ctx1.fill();
+    function first(){
+      ctx1.fillStyle = "#ffffff";
+      ctx1.fillRect(0, 0, 1000, 1200);
 
+      ctx1.fillStyle = "black";
+      ctx1.beginPath();
+      ctx1.moveTo(x[0], y[0]);
+      for(let i = 1; i < 10; i++) {
+        ctx1.lineTo(x[i], y[i]);
+      }
+      ctx1.stroke();
+
+      ctx1.fillStyle = "skyblue";
+      ctx1.beginPath();
+      ctx1.arc(mx, my, r, 0, Math.PI*2, true);
+      ctx1.fill();
+    }
+
+    first();
   </script>
 </body>
 </html>
