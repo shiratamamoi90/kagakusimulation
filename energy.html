@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ENERGY</title>
+</head>
+<body>
+  <input type="button" value="start" onclick="update()">
+  <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
+  <canvas id="c2" width="1000px" height="1000px" style="position:absolute; z-index;1"></canvas>
+  <script type="text/javascript">
+    var c1 = document.getElementById('c1');
+    var ctx1 = c1.getContext('2d');
+    var c2 = document.getElementById('c2');
+    var ctx2 = c2.getContext('2d');
+
+    var x = 200;
+    var y = 100;
+
+    var t = 0;
+    var m = 1.0;
+    var g = 9.8, ax = 0, ay = 0;
+    var vx = 0, vy = 0;
+    var e = 0;
+    var pi = 0;
+    var r = 20;
+    var s = 0;
+
+    function update() {
+      ctx2.clearRect(0, 0, 1000, 1000);
+
+      if(s == 0) {
+        if(y >= 500) {
+          s = 1;
+        } else {
+          y += ((1/2) * g * (t * t));
+          vy += g * t;
+        }
+      } else if(s == 1) {
+        if(x == 500 && y == 780) {
+          s++;
+        } else {
+          pi += Math.PI*0.005;
+          vy += Math.sin(pi) * 300 * pi / t;
+          vx += Math.cos(pi) * 300 * pi / t;
+          ay += vy * vy / r;
+          ax += vx * vx / r;
+          x += (1/2) * ax * t;
+          y += (1/2) * ay * t;
+        }
+      } else if(s == 3){
+        x += vx*t;
+      }
+      t += 0.1;
+
+      console.log(x);
+      console.log(y);
+      console.log(s);
+
+      ctx2.beginPath();
+      ctx2.arc(x + r, y, r, 0, Math.PI*2, true);
+      ctx2.fill();
+
+      tid = setTimeout("update()", 100);
+    }
+
+    function first() {
+      ctx1.fillStyle = "#ffffff";
+      ctx1.beginPath();
+      ctx1.arc(500, 500, 300, 0, Math.PI*2, true);
+      ctx1.stroke();
+
+      ctx1.beginPath();
+      ctx1.moveTo(500, 800);
+      ctx1.lineTo(1000, 800);
+      ctx1.stroke();
+
+      ctx1.beginPath();
+      ctx1.moveTo(200, 0);
+      ctx1.lineTo(200, 500);
+      ctx1.stroke();
+
+      ctx2.fillStyle = "blue";
+      ctx2.beginPath();
+      ctx2.arc(x + 20, y, 20, 0, Math.PI*2, true);
+      ctx2.fill();
+    }
+
+    first();
+  </script>
+</body>
+</html>
