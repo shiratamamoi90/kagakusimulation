@@ -7,27 +7,27 @@
 <body>
 <input type="button" value="start" onclick="start()">
 <br>
-<canvas id="c1" width="1500px" height="1000px" style="position:absolute; z-index:0"></canvas>
-<canvas id="c2" width="1500px" height="1000px" style="position:absolute; z-index:1"></canvas>
+<canvas id="c1" width="2000px" height="1000px" style="position:absolute; z-index:0"></canvas>
+<canvas id="c2" width="2000px" height="1000px" style="position:absolute; z-index:1"></canvas>
+<canvas id="c3" width="2000px" height="1000px" style="position:absolute; z-index:2"></canvas>
 <script type="text/javascript">
   var c1 = document.getElementById('c1');
   var ctx1 = c1.getContext("2d");
   var c2 = document.getElementById('c2');
   var ctx2 = c2.getContext("2d");
+  var c3 = document.getElementById('c3');
+  var ctx3 = c3.getContext("2d");
 
-　var planet_v = [];//各惑星の速度
+  var x = 750, y = 500, m = 330000.0;//太陽の座標、重さ
   var planet_vx = [0, 0, 0, 0, 0, 0, 0, 0];
-  var planet_vy = [-10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0, -10.0];
-  var planet_x = [788, 822, 850, 902, 1270, 1755, 2921, 4011];//各惑星の座標
+  var planet_vy = [-20.3, -17.8, -10.0, -11.2, -10.0, -10.0, -10.0, -10.0];
+  var planet_x = [769, 786, 800, 826, 1010, 1252, 1835, 2250];//各惑星の座標
   var planet_y = [500, 500, 500, 500, 500, 500, 500, 500];
   var planet_fx;
   var planet_fy;
   var planet_m = [0.05, 8.1, 1, 0.11, 317, 95, 14, 17];//各惑星の重さ
-  var x = 750, y = 500, m = 33000000000.0;//太陽の座標、重さ
-  var vx = 0, vy = 0;
   var G = 6.7;//重力定数
   var dt = 0.1;//時間刻み
-  var pi = 0;
 
   p1 = ctx2.createImageData(1, 1);
   p1.data[0] = 255;
@@ -60,10 +60,10 @@
     planet_vx[i] = planet_vx[i] + planet_fx*dt;
     planet_y[i] = planet_y[i] + planet_vy[i]*dt;
     planet_vy[i] = planet_vy[i] + planet_fy*dt;
-    x = x + vx*dt;
-    vx = vx + ((-1) * planet_fx * dt);
-    y = y + vy*dt;
-    vy = vy + ((-1) * planet_fy * dt);
+
+    console.log(i);
+    console.log(planet_x[i]);
+    console.log(planet_y[i]);
 
     ctx2.putImageData(p1, planet_x[i], planet_y[i]);
   }
@@ -74,8 +74,13 @@
 
     ctx1.fillStyle = "#0080ff";
     ctx1.beginPath();
-    ctx1.arc(x, y, 20, 0, Math.PI*2, true);
+    ctx1.arc(x, y, 15, 0, Math.PI*2, true);
     ctx1.fill();
+
+    ctx3.fillStyle = "#ffffff";
+    ctx3.beginPath();
+    ctx3.arc(x, y, 3, 0, Math.PI*2, true);
+    ctx3.fill();
   }
 
   function start() {
