@@ -4,17 +4,30 @@
   <meta charset="UTF-8">
   <title>Spring</title>
 </head>
+<style>
+
+</style>
 <body>
-  <canvas id="c1" width="1000px" height="1200px"></canvas>
   <input type="button" value="start" onclick="update()">
+  <input type="button" value="stop" onclick="stop()">
   <form>
-    <input type="number" id="mass">
-    <input type="number" id="Spring">
-    <input type="button" value="set" onclick="set()">
+    玉の重さ：<input type="number" id="mass"><br>
+    ばね定数：<input type="number" id="Spring">
+    <input type="button" value="set" onClick="set()">
   </form>
+  玉の重さ：<span id="mass_info"></span><br>
+  ばね定数：<span id="Spring_info"></span>
+  <br>
+  <canvas id="c1" width="1500px" height="1500px" style="position:absolute; z-index:0"></canvas>
+  <canvas id="c2" width="1500px" height="1500px" style="position:absolute; z-index:1"></canvas>
+  <br>
+
   <script type="text/javascript">
     var c1 = document.getElementById('c1');
     var ctx1 = c1.getContext("2d");
+    var c2 = document.getElementById('c2');
+    var ctx2 = c1.getContext("2d");
+    var tid;
 
     var x = [300, 300, 200, 400, 200, 400, 200, 400, 300, 300];
     var y = [  0, 100, 150, 250, 350, 450, 550, 650, 750, 850];
@@ -28,16 +41,13 @@
     var mx = x[9];
     var my = y[9] + r;
 
-    function update() {
-      /*
-      if(Math.cos(Math.sqrt(k/m) * t) > 0) {
-        //a = ;
-      } else {
-        //a = ;
-      }
-      */
+    var xx = mx + 500;
+    var yy = my;
 
+    function update() {
       my += r * Math.cos(Math.sqrt(k/m) * t);
+      yy += r * Math.cos(Math.sqrt(k/m) * t);
+      xx += r * Math.sin(Math.sqrt(k/m) * t);
 
       for(let i = 1; i < 10; i++) {
         y[i] += r * Math.cos(Math.sqrt(k/m) * t);
@@ -47,22 +57,50 @@
 
       first();
 
+
       tid = setTimeout("update()", 50);
     }
 
+    function stop() {
+      clearTimeout(tid);
+    }
+
     function set() {
-      if(document.getElementById("mass").value != null) {
+      if(document.getElementById("mass").value > 0) {
         m = document.getElementById("mass").value;
       }
 
-      if(document.getElementById("Spring").value != null) {
+      if(document.getElementById("Spring").value > 0) {
         k = document.getElementById("Spring").value;
       }
+      display_info();
+      first();
+    }
+
+    function display_info() {
+      document.getElementById('mass_info').innerHTML = m;
+      document.getElementById('Spring_info').innerHTML = k;
+    }
+
+    function circle(){
+      ctx2.fillStyle = "skyblue";
+      //ctx2.beginPath();
+      ctx2.arc(xx, yy, 4, 0, Math.PI*2, true);
+      ctx2.fill();
+    }
+
+    function line() {
+      ctx1.fillStyle = "black";
+      ctx1.beginPath();
+      ctx1.moveTo(mx, my);
+      ctx1.lineTo(xx, yy);
+      ctx1.lineWidth = 1;
+      ctx1.stroke();
     }
 
     function first(){
       ctx1.fillStyle = "#ffffff";
-      ctx1.fillRect(0, 0, 1000, 1200);
+      ctx1.fillRect(0, 0, 1500, 1500);
 
       ctx1.fillStyle = "black";
       ctx1.beginPath();
@@ -76,9 +114,13 @@
       ctx1.beginPath();
       ctx1.arc(mx, my, r, 0, Math.PI*2, true);
       ctx1.fill();
+
+      circle();
+      line();
     }
 
     first();
+    display_info();
   </script>
 </body>
 </html>
