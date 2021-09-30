@@ -6,6 +6,7 @@
 </head>
 <body>
   <input type="button" value="start" onclick="update()">
+  <input type="button" value="stop" onclick="stop()">
   <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
   <canvas id="c2" width="1000px" height="1000px" style="position:absolute; z-index;1"></canvas>
   <script type="text/javascript">
@@ -13,6 +14,7 @@
     var ctx1 = c1.getContext('2d');
     var c2 = document.getElementById('c2');
     var ctx2 = c2.getContext('2d');
+    var tid = 0;
 
     var x = 200;
     var y = 100;
@@ -20,11 +22,12 @@
     var t = 0;
     var m = 1.0;
     var g = 9.8, ax = 0, ay = 0;
-    var vx = 0, vy = 0;
-    var e = 0;
-    var pi = 0;
+    var vx = 0, vy = 0, v;
+    var d = 0;
     var r = 20;
     var s = 0;
+    var h = 700;
+    var h_now = 0;
 
     function update() {
       ctx2.clearRect(0, 0, 1000, 1000);
@@ -32,6 +35,8 @@
       if(s == 0) {
         if(y >= 500) {
           s = 1;
+          h_now = y;
+          v = vy;
         } else {
           y += ((1/2) * g * (t * t));
           vy += g * t;
@@ -40,13 +45,13 @@
         if(x == 500 && y == 780) {
           s++;
         } else {
-          pi += Math.PI*0.005;
-          vy += Math.sin(pi) * 300 * pi / t;
-          vx += Math.cos(pi) * 300 * pi / t;
-          ay += vy * vy / r;
-          ax += vx * vx / r;
-          x += (1/2) * ax * t;
-          y += (1/2) * ay * t;
+          v = Math.sqrt(v*v + g*(h-h_now));
+          d = Math.sqrt(r*r + (h-h_now)*(h-h_now));
+          vx = v*(r/d);
+          vy = v*((h-h_now)/d);
+          x = ((1/2) * (vx/t) * t*t);
+          y = ((1/2) * (vy/t) * t*t);
+          console.log(vy);
         }
       } else if(s == 3){
         x += vx*t;
@@ -62,6 +67,10 @@
       ctx2.fill();
 
       tid = setTimeout("update()", 100);
+    }
+
+    function stop() {
+        clearTimeout(tid);
     }
 
     function first() {
