@@ -5,19 +5,58 @@
   <title>Spring</title>
 </head>
 <style>
-
+  .main {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
 <body>
-  <input type="button" value="start" onclick="update()">
-  <input type="button" value="stop" onclick="stop()">
-  <input type="button" value="reset" onclick="location.reload()">
+  <div class="main">
+  <h2>ばねの運動</h2>
+  <input type="button" value="スタート" onclick="update()">
+  <input type="button" value="ストップ" onclick="stop()">
+  <input type="button" value="位置のリセット" onclick="location.reload()">
   <form>
     玉の重さ：<input type="number" id="mass"><br>
     ばね定数：<input type="number" id="Spring">
-    <input type="button" value="set" onClick="set()">
+    <input type="button" value="数字をセット" onClick="set()">
   </form>
   玉の重さ：<span id="mass_info"></span><br>
   ばね定数：<span id="Spring_info"></span>
+  <table>
+    <tr>
+      <td>
+        <details>
+          <summary>ページのせつめい</summary>
+          <p>「スタート」ボタンでばねが動くよ。</p>
+          <p>「ストップ」ボタンでばねが止まるよ。</p>
+          <p>「位置のリセット」ボタンでばねの位置がさいしょと同じになるよ。</p>
+          <p>「玉の重さ」と「ばね定数」に好きな数字を入力して「数字をセット」ボタンを押すと<br>ばねの動きが変わるよ。</p>
+        </details>
+      </td>
+      <td>
+        <details>
+          <summary>ばねの運動について</summary>
+          <p>ばねの力＝ばねの長さｘばね定数</p>
+          <p>上↑の式がばねの力についてあらわしているよ。</p>
+          <p>ばね定数はばねの強さ(かたさ)だと思ってくれた大丈夫だよ</p>
+          <p>かるくしかせつめいはしないけど、もっと知りたいと思ったら下↓のリンクから見てね</p>
+          <p>
+            <a href="https://chugaku-juken.com/bane-vh/">中学1年生向け</a>
+            <a href="https://exam.fukuumedia.com/rika1-17/">中学3年生向け</a>
+            <a href="https://wakariyasui.sakura.ne.jp/p/mech/dannsei/hukku.html">高校生レベルまで知りたかったら</a>
+          </p>
+        </details>
+      </td>
+    </tr>
+  </table>
+  </div>
   <br>
   <canvas id="c1" width="1500px" height="1500px" style="position:absolute; z-index:0"></canvas>
   <canvas id="c2" width="1500px" height="1500px" style="position:absolute; z-index:1"></canvas>
