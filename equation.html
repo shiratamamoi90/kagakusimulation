@@ -2,128 +2,157 @@
 <html lang="ja">
 <head>
   <mata charset="UTF-8">
-  <title>masatu</title>
-</head>
+    <title>masatu</title>
+  </head>
+  <style>
+  .main {
+    text-align: center;
+  }
+</style>
 <body>
-  <input type="button" onclick="start()" value="start">
-  <input type="button" onclick="c()" value="clear">
-  <br>
-  <form>
-    <input type="number" size="5" id="pi">
-    <!--<input type="text" size="5" name="size">-->
-    <input type="button" value="set" onclick="set()">
-  </form>
-  <br>角度：<div id="C">45</div>度<br>
+  <div class="main">
+    <h1>坂の運動</h1>
+    <input type="button" onclick="start()" value="スタート">
+    <input type="button" onclick="stop()" value="ストップ">
+    <input type="button" onclick="c()" value="リセット">
+    <br>
+    <form>
+      角度設定(度)：<input type="number" size="5" id="pi">
+      <input type="button" value="セット" onclick="set()">
+      <br>
+      色の設定：<input type="text" size="10" id="color">
+      <input type="button" value="色のセット" onclick="color_set()">
+      <br>
+      <a href="https://www.colordic.org/">このページから色を選んでね</a>
+    </form>
+    <br>角度：<span id="C">45</span>度<br>
+    <details>
+      <summary>ページ説明</summary>
+      <p>坂をすべるボールの運動に</p>
+    </details>
+  </div>
   <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
   <canvas id="c2" width="1000px" height="1000px" style="position:absolute; z-index:1"></canvas>
   <br>
 
   <script type="text/javascript">
-    //描画領域の作成
-    var c1 = document.getElementById('c1');
-    var ctx1 = c1.getContext("2d");
-    var c2 = document.getElementById('c2');
-    var ctx2 = c2.getContext("2d");
+  //描画領域の作成
+  var c1 = document.getElementById('c1');
+  var ctx1 = c1.getContext("2d");
+  var c2 = document.getElementById('c2');
+  var ctx2 = c2.getContext("2d");
 
-    //変数の定義
-    var first_x, first_y;
-    var x, y, r, t, radian;
-    var tid;
+  //変数の定義
+  var first_x, first_y;
+  var x, y, r, t, radian;
+  var tid;
 
-    //初期設定
-    first_x = 1600, first_y = 1600;
+  //初期設定
+  saka_r = 1000;
+  mx = 200, my = 900;
 
-    r = 20; t = 0, g = 9.8; //rはボールの半径、tは時間
-    var a;
-    radian = Math.PI/4; //Math.PIは円周率を表しており、radianはラジアンを表している。
+  r = 20; t = 0, g = 9.8; //rはボールの半径、tは時間
+  var s = 0;
+  radian = Math.PI/4; //Math.PIは円周率を表しており、radianはラジアンを表している。
 
-    //ボールの転がり開始をする処理
-    function start() {
-      x = first_x + (r/Math.cos(radian));
-      y = first_y; //ボールの中心の位置を別の変数に代入
-      t = 0.0; //時間の初期化
+  var color = "skyblue";
 
-      update(); //転がりを描画するための処理
+  //ボールの転がり開始をする処理
+  function start() {
+    if(s == 1) {
+      return 0;
+    }
+    s = 1;
+
+    x = first_x;
+    y = first_y-22; //ボールの中心の位置を別の変数に代入
+    t = 0.0; //時間の初期化
+
+    update(); //転がりを描画するための処理
+  }
+
+  //転がりを描画するための処理
+  function update(){
+    ctx2.clearRect(0, 0, 1000, 1000); //ボールを消す処理
+
+    //ボールの座標を更新
+    y += (1/2) * g * Math.sin(radian) * (t*t);
+    x -= (1/2) * g * Math.cos(radian) * (t*t);
+
+    t += 0.05; //時間の更新
+
+    //ボールの描画
+    ctx2.fillStyle = color;
+    ctx2.beginPath();
+    ctx2.arc(x, y, r, 0, Math.PI*2, true);
+    ctx2.fill();
+
+    tid = setTimeout("update()", 50);
+  }
+
+  function stop() {
+    s = 0;
+
+    clearTimeout(tid);
+  }
+
+  //ボールの位置を戻す処理
+  function c(){
+    ctx2.fillStyle = "#ffffff";
+    ctx2.clearRect(0, 0, 1000, 1000);
+
+    ctx2.fillStyle = color;
+    ctx2.beginPath();
+    ctx2.arc(first_x, first_y-22, r, 0, Math.PI*2, true);
+    ctx2.fill();
+  }
+
+  function color_set() {
+    color = document.getElementById("color").value;
+
+    console.log(color);
+
+    c();
+  }
+
+  //坂の角度を設定するための処理
+  function set(){
+    pi = document.getElementById("pi").value;
+
+    if(pi < 0 || pi > 90) {
+      return 0;
     }
 
-    //転がりを描画するための処理
-    function update(){
-      ctx2.clearRect(0, 0, 1000, 1000); //ボールを消す処理
+    document.getElementById("C").innerHTML = pi;
+    radian = pi*(Math.PI/180);
 
-      //ボールの座標を更新
-      //y += (1/2) * g * Math.cos(radian) * (t*t);
-      //x += (1/2) * g * Math.sin(radian) * (t*t);
-      y += (1/2) * a * (t*t);
-      x += (1/2) * a * (t*t);
+    first();
 
-      t += 0.05; //時間の更新
+    c();
+  }
 
-      //ボールの描画
-      ctx2.fillStyle = "skyblue";
-      ctx2.beginPath();
-      ctx2.arc(x, y, r, 0, Math.PI*2, true);
-      ctx2.fill();
+  //坂を描画するための処理
+  function first(){
+    ctx1.fillStyle = "#ffffff";
+    ctx1.fillRect(0, 0, 1000, 1000);
 
-      //坂の下まで転がったら停止
-      if(x < 900 && y < 900 ){
-        tid = setTimeout("update()", 50);
-      }
-    }
+    ctx1.fillStyle = "black";
+    ctx1.beginPath();
+    ctx1.moveTo(my, my);
+    ctx1.lineTo(mx, my);
+    first_x = saka_r*Math.cos(radian);
+    first_y = saka_r*Math.sin(radian);
+    console.log("x=" + first_x + "\ny=" + first_y);
+    first_x = first_x + mx;
+    first_y = my - first_y;
+    ctx1.lineTo(first_x, first_y);
+    ctx1.stroke();
 
-    //ボールの位置を戻す処理
-    function c(){
-      ctx2.fillStyle = "#ffffff";
-      ctx2.clearRect(0, 0, 1000, 1000);
-
-      ctx2.fillStyle = "skyblue";
-      ctx2.beginPath();
-      ctx2.arc(first_x + (r/Math.cos(radian)), first_y, r, 0, Math.PI*2, true);
-      ctx2.fill();
-    }
-
-    //坂の角度を設定するための処理
-    function set(){
-      pi = document.getElementById("pi").value;
-
-      if(pi < 0 || pi > 90) {
-        return 0;
-      }
-
-      document.getElementById("C").innerHTML = pi;
-      pi = (90 - pi) / 180;
-      radian = Math.PI*pi;
-
-      first();
-
-      c();
-    }
-
-    //坂を描画するための処理
-    function first(){
-      ctx1.fillStyle = "#ffffff";
-      ctx1.fillRect(0, 0, 1000, 1000);
-
-      ctx1.fillStyle = "black";
-      ctx1.beginPath();
-      ctx1.moveTo(200, 900);
-      ctx1.lineTo(900, 900);
-      first_x -= first_x*Math.cos(radian);
-      first_y -= first_y*Math.sin(radian);
-      a = g * (900-first_y)/(900-first_x);
-      if(first_x < 0) {
-        first_x = 0;
-      }
-      if(first_y < 0) {
-        first_y = 0;
-      }
-      ctx1.lineTo(first_x, first_y);
-      ctx1.stroke();
-
-      ctx2.fillStyle = "skyblue";
-      ctx2.beginPath();
-      ctx2.arc(first_x + (r/Math.cos(radian)), first_y, r, 0, Math.PI*2, true);
-      ctx2.fill();
-    }
+    ctx2.fillStyle = color;
+    ctx2.beginPath();
+    ctx2.arc(first_x, first_y-22, r, 0, Math.PI*2, true);
+    ctx2.fill();
+  }
 
   first();
   </script>
