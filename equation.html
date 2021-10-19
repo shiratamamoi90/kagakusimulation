@@ -2,11 +2,17 @@
 <html lang="ja">
 <head>
   <mata charset="UTF-8">
-    <title>masatu</title>
+    <title>equation</title>
   </head>
   <style>
   .main {
     text-align: center;
+  }
+  table, td, th {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px #808080 solid;
   }
 </style>
 <body>
@@ -14,7 +20,7 @@
     <h1>坂の運動</h1>
     <input type="button" onclick="start()" value="スタート">
     <input type="button" onclick="stop()" value="ストップ">
-    <input type="button" onclick="c()" value="リセット">
+    <input type="button" onclick="location.reload()" value="リセット">
     <br>
     <form>
       角度設定(度)：<input type="number" size="5" id="pi">
@@ -24,11 +30,22 @@
       <input type="button" value="色のセット" onclick="color_set()">
       <br>
       <a href="https://www.colordic.org/">このページから色を選んでね</a>
+      <br>
+      例：#0000ff, #ffedab
     </form>
     <br>角度：<span id="C">45</span>度<br>
     <details>
       <summary>ページ説明</summary>
-      <p>坂をすべるボールの運動に</p>
+      <p>坂をすべるボールの運動のシミュレーションです。</p>
+      <p>「スタート」ボタンでボールをスタート。</p>
+      <p>「ストップ」ボタンでボールを止めることができるよ。</p>
+      <p>「リセット」ボタンでボールと角度をリセットできるよ</p>
+      <p>角度と色を自由に変えてボールを転がして見てね</p>
+      <p>データのらんに時間と速度がきろくされるようになっているから、時間と速度のかかわりをみつけてみてね。</p>
+    </details>
+    <details>
+      <summary>データ</summary>
+      <span id="data"></span>
     </details>
   </div>
   <canvas id="c1" width="1000px" height="1000px" style="position:absolute; z-index:0"></canvas>
@@ -55,6 +72,10 @@
   var s = 0;
   radian = Math.PI/4; //Math.PIは円周率を表しており、radianはラジアンを表している。
 
+  var sokutei_vx = [];
+  var sokutei_vy = [];
+  var sokutei_t = [];
+
   var color = "skyblue";
 
   //ボールの転がり開始をする処理
@@ -79,6 +100,15 @@
     y += (1/2) * g * Math.sin(radian) * (t*t);
     x -= (1/2) * g * Math.cos(radian) * (t*t);
 
+    if(x < 200 && y > 900) {
+      pic_data();
+      return 0;
+    } else {
+      sokutei_t.push(t);
+      sokutei_vx.push(g*Math.sin(radian)*t);
+      sokutei_vy.push(g*Math.cos(radian)*t);
+    }
+
     t += 0.05; //時間の更新
 
     //ボールの描画
@@ -94,6 +124,16 @@
     s = 0;
 
     clearTimeout(tid);
+  }
+
+  function pic_data() {
+    var str = "<table><tr><th>時間</th><th>斜面に水平な速度</th><th>斜面に垂直な速度</th></th>";
+    for(var i = 0; i < sokutei_t.length; i++) {
+      str += "<tr>";
+      str += "<td>" + sokutei_t[i].toPrecision(5) + "</td><td>" + sokutei_vx[i].toPrecision(5) + "</td><td>" + sokutei_vy[i].toPrecision(5) + "</td>";
+      str += "</tr>";
+    }
+    document.getElementById("data").innerHTML = str;
   }
 
   //ボールの位置を戻す処理
